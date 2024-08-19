@@ -5,7 +5,7 @@
 # @Author  : jerry.zzw 
 # @Email   : jerry.zzw@antgroup.com
 # @FileName: component_base.py
-from abc import ABC
+from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,7 +18,9 @@ class ComponentBase(BaseModel):
     """组件基类，用于定义组件的基础类."""
 
     component_type: ComponentEnum
-    # Pydantic 的受保护命名空间配置
+    # component yaml path
+    component_config_path: Optional[str] = None
+    # pydantic protected_namespaces config
     model_config = ConfigDict(protected_namespaces=())
 
     def get_instance_code(self) -> str:
