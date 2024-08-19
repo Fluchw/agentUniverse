@@ -121,6 +121,7 @@ class law_drama_planner(Planner):
             agent_input['drama'] = drama
             agent = role_agents[role]
 
+            LOGGER.debug(f"agent_input {agent_input}")
             if role != user_role:
                 output_object: OutputObject = agent.run(**agent_input)
 

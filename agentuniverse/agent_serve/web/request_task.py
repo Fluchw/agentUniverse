@@ -61,10 +61,26 @@ class RequestTask:
         self.saved = saved
         self.__request_do__ = self.add_request_do()
 
+    def print_queue_content(self):
+        """Print content of the output_stream queue."""
+        while True:
+            try:
+                item = self.queue.get(block=True, timeout=1)
+                if item is not None:
+                    print(f"Queue item: {item}")
+                else:
+                    # 如果队列为空，短暂休息一下
+                    time.sleep(0.1)
+            except queue.Empty:
+                # 如果队列为空，短暂休息一下
+                time.sleep(0.1)
+
     def receive_steps(self):
         """Yield the stream data by getting data from the queue."""
         while True:
             output: str = self.queue.get()
+            LOGGER.debug(f"receive_steps data: {json.dumps({'process': output}, ensure_ascii=False)}")
+
             if output is None:
                 break
             if output == EOF_SIGNAL:
@@ -124,6 +140,7 @@ class RequestTask:
         self.kwargs['output_stream'] = self.queue
         self.thread = ThreadWithReturnValue(target=self.func,
                                             kwargs=self.kwargs)
+        LOGGER.debug(f'self.kwargs {self.kwargs}')
         self.thread.start()
         return self.receive_steps()
 

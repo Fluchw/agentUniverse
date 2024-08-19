@@ -74,6 +74,7 @@ class law_drama_agent(Agent):
         agent_input['chat_history'] = input_object.get_data('chat_history') or []
         agent_input['background'] = input_object.get_data('background') or ''
         agent_input['image_urls'] = input_object.get_data('image_urls') or []
+        agent_input['output_stream'] = input_object.get_data('output_stream') or None
         agent_input['date'] = datetime.now().strftime('%Y-%m-%d')
         # agent_input['event'] = input_object.get_data('event') or EventDispatcher()
 
@@ -95,6 +96,7 @@ class law_drama_agent(Agent):
 
         agent_input = self.pre_parse_input(input_object)
         LOGGER.debug(f"agent_input {agent_input}")
+        # LOGGER.debug(f"input_object {input_object.to_json_str()}")
         planner_result = self.execute(input_object, agent_input)
 
         # for planner_result in planner_results:

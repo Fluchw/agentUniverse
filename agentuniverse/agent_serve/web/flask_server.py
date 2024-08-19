@@ -63,10 +63,12 @@ def service_run_stream(service_id: str, params: dict, saved: bool = False):
     Return:
         A SSE(Server-Sent Event) stream.
     """
+    LOGGER.debug("触发 service_run_stream !!!")
     params = {} if params is None else params
     params['service_id'] = service_id
     task = RequestTask(service_run_queue, saved, **params)
     response = Response(task.stream_run(), mimetype="text/event-stream")
+    # threading.Thread(target=task.print_queue_content).start()
     response.headers['X-Request-ID'] = task.request_id
     return response
 
